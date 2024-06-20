@@ -13,12 +13,11 @@ import { createClient } from "@/utils/supabase/client";
 export default function page() {
   const handleLoginWithOAuth = (provider: "github" | "google") => {
     const supabase = createClient();
+    console.log(location.origin);
     supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: process.env.APP_URL
-          ? `https://${process.env.APP_URL}`
-          : "http://localhost:3000" + "/auth/callback",
+        redirectTo: location.origin + "/auth/callback",
       },
     });
   };

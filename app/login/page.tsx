@@ -11,9 +11,9 @@ import { Separator } from "@/components/ui/separator";
 import { createClient } from "@/utils/supabase/client";
 
 export default function page() {
+  console.log(location.origin);
   const handleLoginWithOAuth = (provider: "github" | "google") => {
     const supabase = createClient();
-    console.log(location.origin);
     supabase.auth.signInWithOAuth({
       provider,
       options: {

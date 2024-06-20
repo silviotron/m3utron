@@ -16,7 +16,9 @@ export default function page() {
     supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: location.origin + "/auth/callback",
+        redirectTo: process.env.APP_URL
+          ? `https://${process.env.APP_URL}`
+          : "http://localhost:3000" + "/auth/callback",
       },
     });
   };

@@ -6,8 +6,8 @@ import { ModeToggle } from "@/components/mode-toggle";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
+const defaultUrl = process.env.APP_URL
+  ? `https://${process.env.APP_URL}`
   : "http://localhost:3000";
 console.log(defaultUrl);
 export const metadata = {

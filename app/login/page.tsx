@@ -5,7 +5,7 @@ import { KeyRound } from "lucide-react";
 import React from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { login, signup, handleoAuth } from "./actions";
+import { login, signup } from "./actions";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { createClient } from "@/utils/supabase/client";
@@ -45,12 +45,10 @@ export default function page() {
           Google
         </Button>
         <Separator orientation="horizontal" />
-        <form className="space-y-5">
+        <form className="space-y-5" action={login}>
           <Input id="email" name="email" type="email" placeholder="Email" />
           <Input id="password" name="password" type="password" placeholder="Password" />
-          <Button className="w-full flex items-center gap-2" formAction={login}>
-            Login
-          </Button>
+          <Button className="w-full flex items-center gap-2">Login</Button>
         </form>
         <Button className="w-full flex items-center" variant="link" asChild>
           <Link href={"/"}>Volver</Link>

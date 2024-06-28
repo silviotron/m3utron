@@ -8,6 +8,7 @@ export default async function AuthButton() {
 
   const user = await supabase.auth.getSession();
   console.log(user.data.session?.provider_token);
+  console.log(user.data.session?.user);
 
   return <div>test</div>;
 }

@@ -5,13 +5,14 @@ import { KeyRound } from "lucide-react";
 import React from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { FaTwitch } from "react-icons/fa";
 import { login, signup } from "./actions";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { createClient } from "@/utils/supabase/client";
 
 export default function page() {
-  const handleLoginWithOAuth = (provider: "github" | "google") => {
+  const handleLoginWithOAuth = (provider: "github" | "google" | "twitch") => {
     const supabase = createClient();
     supabase.auth.signInWithOAuth({
       provider,
@@ -28,6 +29,14 @@ export default function page() {
           <h1 className="text-2xl font-bold">Next + Supabase</h1>
         </div>
         <p className="text-sm darck:text-gray-300">Register/signin Today 👇</p>
+        <Button
+          className="w-full flex items-center gap-2"
+          variant="outline"
+          onClick={() => handleLoginWithOAuth("twitch")}
+        >
+          <FaTwitch color="#9146FF" />
+          Twitch
+        </Button>
         <Button
           className="w-full flex items-center gap-2"
           variant="outline"

@@ -6,8 +6,8 @@ import { Button } from "./ui/button";
 export default async function AuthButton() {
   const supabase = createClient();
 
-  const user = (await supabase.auth.getSession()).data.session?.provider_token;
-  console.log(user);
+  const user = await supabase.auth.getSession();
+  console.log(user.data.session?.provider_token);
 
   return <div>test</div>;
 }

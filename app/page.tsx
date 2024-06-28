@@ -1,6 +1,7 @@
 import AuthButton from "../components/AuthButton";
 import { createClient } from "@/utils/supabase/server";
 import Header from "@/components/Header";
+import Followed from "@/components/followed";
 import { ModeToggle } from "@/components/mode-toggle";
 import HlsControl from "@/components/hlsControl";
 
@@ -24,6 +25,7 @@ export default async function Index() {
       <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
         <div className="w-full max-w-4xl flex justify-end items-center p-3 text-sm gap-2">
           {isSupabaseConnected && <AuthButton />}
+          {isSupabaseConnected && <Followed />}
           <ModeToggle />
         </div>
       </nav>

@@ -75,3 +75,56 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+.ticker-tape-container {
+  overflow-x: hidden;
+  max-width: 700px;
+  width: 100%;
+  display: flex;
+}
+
+.ticker-tape {
+  --direction: normal;
+  --duration: 60s;
+  --delay: 0s;
+  --iteration-count: infinite;
+  display: flex;
+  gap: 1rem;
+  flex: 0 0 auto;
+  margin-right: 1rem;
+  min-width: 100%;
+  align-items: center;
+  animation: marquee var(--duration) linear var(--delay) var(--iteration-count);
+  animation-play-state: var(--play);
+  animation-delay: var(--delay);
+  animation-direction: var(--direction);
+}
+
+@keyframes scrmarqueeoll {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* This is just some styling to make it look presentable */
+
+.basic-styling {
+  border-radius: 10px;
+  background-color: lightblue;
+  padding: 2rem;
+  color: #010101;
+  font-size: 1.5rem;
+  font-family: sans-serif;
+}
+
+.basic-styling span {
+  padding: 0.25rem 1rem;
+  border-radius: 10px;
+  border: 2px dashed #5fb3ce;
+  background-color: #86c5da;
+}

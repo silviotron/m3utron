@@ -13,20 +13,18 @@ export default async function AuthButton() {
 
   console.log(userId);
 
-  const url = `https://api.twitch.tv/helix/streams/followed?user_id=${userId}`;
+  const res = await fetch(
+    `https://api.twitch.tv/helix/streams/followed?user_id=${userId}`,
+    {
+      method: "GET",
+      headers: {
+        "Client-ID": `${clientId}`,
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
-  const options = {
-    method: "GET",
-    headers: {
-      "Client-ID": clientId,
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
-  fetch(url, options)
-    .then((response) => response.json())
-    .then((data) => console.log(data))
-    .catch((error) => console.error("Error:", error));
+  console.log(res);
 
   return <div>test</div>;
 }

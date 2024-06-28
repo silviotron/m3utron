@@ -18,6 +18,7 @@ export default function page() {
       provider,
       options: {
         redirectTo: location.origin + "/auth/callback",
+        scopes: provider === "twitch" ? "user:read:follows" : undefined,
       },
     });
   };

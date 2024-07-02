@@ -7,8 +7,13 @@ interface Followed {
   broadcaster_login: string;
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { id } = req.query; // Obtener la id de la query params
+export async function GET(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  { params }: { params: { id: string } }
+) {
+  const id = params.id; // 'a', 'b', or 'c'
+
   const supabase = createClient(); // Crear el cliente de Supabase
 
   try {

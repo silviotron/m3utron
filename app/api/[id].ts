@@ -22,6 +22,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       throw error;
     }
 
+    if (!(data && data.length > 0)) {
+      return res.status(404).json({ error: "Not Found" });
+    }
+
     const followedList: Followed[] = data[0].followed;
 
     // Construir el contenido del archivo .m3u

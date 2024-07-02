@@ -1,5 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { createClient } from "@/utils/supabase/server";
+interface Followed {
+  followed_at: string;
+  broadcaster_id: string;
+  broadcaster_name: string;
+  broadcaster_login: string;
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query; // Obtener la id de la query params
@@ -16,10 +22,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       throw error;
     }
 
+    const followedList: Followed[] = data[0].followed;
+
     // Construir el contenido del archivo .m3u
     let m3uContent = "#EXTM3U\n";
 
-    for (const channel of data) {
+    for (const channel of followedList) {
       // Obtener la URL .m3u8 del canal
       const response = await fetch(
         `https://twitch-m3u8-api.vercel.app/best?s=${channel.broadcaster_login}`

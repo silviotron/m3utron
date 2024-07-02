@@ -31,27 +31,51 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
       const supabase = createClient();
-
       const session = await supabase.auth.getSession();
       const token = session.data.session?.provider_token;
       const userId = session.data.session?.user.user_metadata.provider_id;
       const clientId = process.env.TWITCH_CLIENT_ID;
 
-      const res = await fetch(
-        `https://api.twitch.tv/helix/channels/followed?user_id=${userId}`,
-        {
+      let followed: any[] = [];
+
+      async function fetchFollowedChannels(cursor = null) {
+        let apiUrl = `https://api.twitch.tv/helix/channels/followed?user_id=${userId}&first=100`; // Solicitar hasta 100 canales por página
+
+        if (cursor) {
+          apiUrl += `&after=${cursor}`;
+        }
+
+        const res = await fetch(apiUrl, {
           method: "GET",
           headers: {
             "Client-ID": `${clientId}`,
             Authorization: `Bearer ${token}`,
           },
+        });
+
+        const data = await res.json();
+
+        if (data.data.length > 0) {
+          followed.push(...data.data);
         }
-      );
-      const data = await res.json();
-      const followed = data.data;
+
+        // Verificar si hay más páginas
+        if (data.pagination && data.pagination.cursor) {
+          await fetchFollowedChannels(data.pagination.cursor);
+        }
+      }
+
+      await fetchFollowedChannels();
+
       const { error } = await supabase
         .from("followed")
         .insert({ user_id: session.data.session?.user.id, followed: followed });
+
+      if (error) {
+        console.error("Error al guardar los canales seguidos:", error);
+      } else {
+        console.log("Canales seguidos guardados correctamente:", followed);
+      }
       return NextResponse.redirect(`${origin}${next}`);
     }
   }

@@ -50,7 +50,7 @@ export async function GET(request: Request) {
       const data = await res.json();
       const followed = data.data;
       const { error } = await supabase
-        .from("followed")
+        .from("public.followed")
         .insert({ user_id: session.data.session?.user.id, followed: followed });
       return NextResponse.redirect(`${origin}${next}`);
     }

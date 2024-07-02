@@ -7,7 +7,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     // Consultar los canales seguidos por el usuario con la ID proporcionada
-    const { data, error } = await supabase.from("followed").select("*").eq("user_id", id);
+    const { data, error } = await supabase
+      .from("followed")
+      .select("followed")
+      .eq("user_id", id);
+
+    console.log(data);
+    console.log(error);
 
     if (error) {
       throw error;

@@ -30,45 +30,6 @@ export async function GET(request: Request) {
     );
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      const supabase = createClient();
-      const session = await supabase.auth.getSession();
-      const token = session.data.session?.provider_token;
-      const userId = session.data.session?.user.user_metadata.provider_id;
-      const clientId = process.env.TWITCH_CLIENT_ID;
-
-      const url = `https://api.twitch.tv/helix/users/follows?from_id=${userId}&first=100`; // Solicitar hasta 100 canales por página
-
-      let followed: any = [];
-
-      let data: any = [];
-
-      let cursor = null;
-
-      do {
-        let apiUrl = url;
-        if (cursor) {
-          apiUrl += `&after=${cursor}`;
-        }
-
-        const res = await fetch(apiUrl, {
-          method: "GET",
-          headers: {
-            "Client-ID": `${clientId}`,
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const data = await res.json();
-
-        if (data.data.length > 0) {
-          followed.push(...data.data);
-        }
-      } while (data.pagination && data.pagination.cursor);
-
-      const { error } = await supabase
-        .from("followed")
-        .insert({ user_id: session.data.session?.user.id, followed: followed });
-
       return NextResponse.redirect(`${origin}${next}`);
     }
   }

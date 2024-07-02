@@ -67,9 +67,13 @@ export async function GET(request: Request) {
         console.log(followed);
       } while (data.pagination && data.pagination.cursor);
       console.log(followed);
+
       const { error } = await supabase
         .from("followed")
-        .insert({ user_id: session.data.session?.user.id, followed: followed });
+        .upsert(
+          { user_id: session.data.session?.user.id, followed: followed },
+          { onConflict: "user_id" }
+        );
       return NextResponse.redirect(`${origin}${next}`);
     }
   }

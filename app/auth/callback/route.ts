@@ -30,6 +30,28 @@ export async function GET(request: Request) {
     );
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
+      const supabase = createClient();
+
+      const session = await supabase.auth.getSession();
+      const token = session.data.session?.provider_token;
+      const userId = session.data.session?.user.user_metadata.provider_id;
+      const clientId = process.env.TWITCH_CLIENT_ID;
+
+      const res = await fetch(
+        `https://api.twitch.tv/helix/channels/followed?user_id=${userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Client-ID": `${clientId}`,
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await res.json();
+      const followed = data.data;
+      const { error } = await supabase
+        .from("followed")
+        .insert({ user_id: session.data.session?.user.id, followed: followed });
       return NextResponse.redirect(`${origin}${next}`);
     }
   }

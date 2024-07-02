@@ -60,7 +60,7 @@ export async function GET(request: Request) {
 
         const data = await res.json();
 
-        if (data.data.length > 0) {
+        if (data.data) {
           followed.push(...data.data);
         }
         console.log(data);

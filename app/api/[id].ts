@@ -12,9 +12,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .select("followed")
       .eq("user_id", id);
 
-    console.log(data);
-    console.log(error);
-
     if (error) {
       throw error;
     }
@@ -25,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     for (const channel of data) {
       // Obtener la URL .m3u8 del canal
       const response = await fetch(
-        `https://twitch-m3u8-api.vercel.app/?s=${channel.broadcaster_login}`
+        `https://twitch-m3u8-api.vercel.app/best?s=${channel.broadcaster_login}`
       );
 
       if (response.ok) {

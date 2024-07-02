@@ -22,11 +22,21 @@ export default async function Index() {
   const supabase = createClient();
 
   const session = await supabase.auth.getSession();
+  const token = session.data.session?.provider_token;
+  const userId = session.data.session?.user.user_metadata.provider_id;
+  const clientId = process.env.TWITCH_CLIENT_ID;
 
-  const { data, error } = await supabase
-    .from("followed")
-    .select("followed")
-    .eq("user_id", session.data.session?.user.id);
+  const res = await fetch(
+    `https://api.twitch.tv/helix/streams/followed?user_id=${userId}`,
+    {
+      method: "GET",
+      headers: {
+        "Client-ID": `${clientId}`,
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  const data = await res.json();
 
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
@@ -39,7 +49,7 @@ export default async function Index() {
       </nav>
 
       <main className="w-full max-w-4xl">
-        <Followed data={data} />
+        <Followed data={data.data} />
       </main>
 
       <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">

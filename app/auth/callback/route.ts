@@ -7,7 +7,7 @@ import { createClient } from "@/utils/supabase/server";
 async function fetchFollowedChannels(
   userId: string,
   token: string,
-  clientId: string,
+  clientId: any,
   supabase: any
 ) {
   let followed: any[] = [];
@@ -82,7 +82,13 @@ export async function GET(request: Request) {
       const userId = session.data.session?.user.user_metadata.provider_id;
       const clientId = process.env.TWITCH_CLIENT_ID;
 
-      await fetchFollowedChannels(userId, token, clientId, supabaseClient);
+      // Comprobación de tipo para token
+      if (token) {
+        await fetchFollowedChannels(userId, token, clientId, supabaseClient);
+      } else {
+        console.error("El token de proveedor es nulo o indefinido.");
+        return NextResponse.redirect(`${origin}/auth/auth-code-error`);
+      }
 
       return NextResponse.redirect(`${origin}${next}`);
     }

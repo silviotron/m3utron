@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { createClient } from "@/utils/supabase/server";
+import { NextResponse } from "next/server";
 
 interface Followed {
   followed_at: string;
@@ -37,7 +38,7 @@ async function fetchM3U8Url(broadcaster_login: string): Promise<string | null> {
   return null;
 }
 
-export async function GET(request: Request, res: NextApiResponse) {
+export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
 
@@ -55,7 +56,7 @@ export async function GET(request: Request, res: NextApiResponse) {
     }
 
     if (!(data && data.length > 0)) {
-      return res.status(404).json({ error: "Not Found" });
+      return NextResponse.json({ error: "not found" }, { status: 404 });
     }
 
     const followedList: Followed[] = data[0].followed;
@@ -70,17 +71,14 @@ export async function GET(request: Request, res: NextApiResponse) {
         m3uContent += `${m3u8Url}\n`;
       }
     }
+    console.log(m3uContent);
 
-    // Configurar la respuesta HTTP para devolver un archivo .m3u
-    res.setHeader("Content-Type", "text/plain");
-    res.setHeader("Content-Disposition", `attachment; filename="${id}.m3u"`);
-
-    // Enviar el contenido del archivo .m3u como respuesta
-    res.status(200).send(m3uContent);
+    NextResponse.json({ file: m3uContent }, { status: 200 });
   } catch (error) {
     console.error("Error al generar el archivo .m3u:", error);
-    res
-      .status(500)
-      .json({ error: "Error interno del servidor al generar el archivo .m3u." });
+    return NextResponse.json(
+      { error: "Error al generar el archivo .m3u" },
+      { status: 500 }
+    );
   }
 }

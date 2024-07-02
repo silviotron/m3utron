@@ -69,11 +69,6 @@ export async function GET(request: Request) {
         .from("followed")
         .insert({ user_id: session.data.session?.user.id, followed: followed });
 
-      if (error) {
-        console.error("Error al guardar los canales seguidos:", error);
-      } else {
-        console.log("Canales seguidos guardados correctamente:", followed);
-      }
       return NextResponse.redirect(`${origin}${next}`);
     }
   }

@@ -8,11 +8,11 @@ interface Followed {
 }
 
 export async function GET(
-  req: NextApiRequest,
+  request: Request,
   res: NextApiResponse,
-  { params }: { params: { id: string } }
+  { params }: { params: { slug: string } }
 ) {
-  const id = params.id; // 'a', 'b', or 'c'
+  const id = params.slug; // 'a', 'b', or 'c'
 
   const supabase = createClient(); // Crear el cliente de Supabase
 

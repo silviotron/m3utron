@@ -36,7 +36,7 @@ export async function GET(request: Request) {
       const userId = session.data.session?.user.user_metadata.provider_id;
       const clientId = process.env.TWITCH_CLIENT_ID;
 
-      const url = `https://api.twitch.tv/helix/users/follows?from_id=${userId}&first=100`; // Solicitar hasta 100 canales por página
+      const url = `https://api.twitch.tv/helix/channels/followed?user_id=${userId}&first=100`; // Solicitar hasta 100 canales por página
 
       let followed: any = [];
 
@@ -66,7 +66,7 @@ export async function GET(request: Request) {
         console.log(data);
         console.log(followed);
       } while (data.pagination && data.pagination.cursor);
-
+      console.log(followed);
       const { error } = await supabase
         .from("followed")
         .insert({ user_id: session.data.session?.user.id, followed: followed });

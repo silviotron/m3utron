@@ -26,7 +26,9 @@ export async function GET(request: Request, res: NextApiResponse) {
     }
     console.log(data);
     const followed = data[0].followed;
+    console.log(followed);
     console.log(JSON.stringify(followed));
+
     return Response.redirect(
       `https://twitch-m3u8-api.vercel.app/file?a=${JSON.stringify(followed)}`
     );

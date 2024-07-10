@@ -67,8 +67,8 @@ export async function GET(request: Request) {
         console.log(followed);
       } while (data.pagination && data.pagination.cursor);
       console.log(followed);
-      const broadcasterLogins = data.map(
-        (item: { broadcaster_login: string }) => item.broadcaster_login
+      const broadcasterLogins = followed.map(
+        (item: { broadcaster_login: any }) => item.broadcaster_login
       );
       console.log(broadcasterLogins);
 

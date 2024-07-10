@@ -38,7 +38,7 @@ async function fetchM3U8Url(broadcaster_login: string): Promise<string | null> {
   return null;
 }
 
-export async function GET(request: Request) {
+export async function GET(request: Request, res: NextApiResponse) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
 
@@ -63,17 +63,19 @@ export async function GET(request: Request) {
 
     // Construir el contenido del archivo .m3u
     let m3uContent = "#EXTM3U\n";
-
+    let contador = 0;
+    const total = followedList.length;
     for (const channel of followedList) {
-      const m3u8Url = await fetchM3U8Url(channel.broadcaster_login);
-      if (m3u8Url) {
-        m3uContent += `#EXTINF:-1, ${channel.broadcaster_name}\n`;
-        m3uContent += `${m3u8Url}\n`;
-      }
-    }
-    console.log(m3uContent);
+      contador++;
 
-    NextResponse.json({ file: m3uContent }, { status: 200 });
+      console.log(`${contador}/${total}`);
+      m3uContent += `#EXTINF:-1, ${channel.broadcaster_name}\n`;
+      m3uContent += `${channel.followed_at}\n`;
+    }
+
+    // Enviar el contenido del archivo .m3u como respuesta
+
+    return Response.json(m3uContent);
   } catch (error) {
     console.error("Error al generar el archivo .m3u:", error);
     return NextResponse.json(

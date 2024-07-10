@@ -24,10 +24,9 @@ export async function GET(request: Request, res: NextApiResponse) {
       return NextResponse.json({ error: "not found" }, { status: 404 });
     }
     console.log(data);
-    console.log(JSON.stringify(data));
-    return Response.redirect(
-      `https://twitch-m3u8-api.vercel.app/file?a=${JSON.stringify(data)}`
-    );
+    const followed = data[0].followed;
+    console.log(JSON.stringify(followed));
+    return Response.redirect(`https://twitch-m3u8-api.vercel.app/file?a=${followed}`);
   } catch (error) {
     console.error("Error al generar el archivo .m3u:", error);
     return NextResponse.json(

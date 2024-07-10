@@ -14,7 +14,8 @@ export async function GET(request: Request, res: NextApiResponse) {
     const { data, error } = await supabase
       .from("followed")
       .select("followed")
-      .eq("user_id", id);
+      .eq("user_id", id)
+      .limit(1);
 
     if (error) {
       throw error;
@@ -26,7 +27,9 @@ export async function GET(request: Request, res: NextApiResponse) {
     console.log(data);
     const followed = data[0].followed;
     console.log(JSON.stringify(followed));
-    return Response.redirect(`https://twitch-m3u8-api.vercel.app/file?a=${followed}`);
+    return Response.redirect(
+      `https://twitch-m3u8-api.vercel.app/file?a=${JSON.stringify(followed)}`
+    );
   } catch (error) {
     console.error("Error al generar el archivo .m3u:", error);
     return NextResponse.json(

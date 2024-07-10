@@ -67,11 +67,15 @@ export async function GET(request: Request) {
         console.log(followed);
       } while (data.pagination && data.pagination.cursor);
       console.log(followed);
+      const broadcasterLogins = data.map(
+        (item: { broadcaster_login: string }) => item.broadcaster_login
+      );
+      console.log(broadcasterLogins);
 
       const { error } = await supabase
         .from("followed")
         .upsert(
-          { user_id: session.data.session?.user.id, followed: followed },
+          { user_id: session.data.session?.user.id, followed: broadcasterLogins },
           { onConflict: "user_id" }
         );
       return NextResponse.redirect(`${origin}${next}`);

@@ -37,6 +37,14 @@ export default async function Index() {
     }
   );
   const data = await res.json();
+  console.log(data);
+
+  const { error } = await supabase
+    .from("streams")
+    .upsert(
+      { user_id: session.data.session?.user.id, streams: data },
+      { onConflict: "user_id" }
+    );
 
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">

@@ -36,13 +36,11 @@ export async function GET(request: Request) {
       const userId = session.data.session?.user.user_metadata.provider_id;
       const clientId = process.env.TWITCH_CLIENT_ID;
 
-      const url = `https://api.twitch.tv/helix/channels/followed?user_id=${userId}&first=100`; // Solicitar hasta 100 canales por página
+      const url = `https://api.twitch.tv/helix/channels/followed?user_id=${userId}&first=100`; // Request up to 100 channels per page
 
-      let followed: any = [];
-
-      let data: any = [];
-
+      let followed: any[] = [];
       let cursor = null;
+      let apiData: any;
 
       do {
         let apiUrl = url;
@@ -58,14 +56,17 @@ export async function GET(request: Request) {
           },
         });
 
-        const data = await res.json();
+        apiData = await res.json();
 
-        if (data.data) {
-          followed.push(...data.data);
+        if (apiData.data) {
+          followed.push(...apiData.data);
         }
-        console.log(data);
+        console.log(apiData);
         console.log(followed);
-      } while (data.pagination && data.pagination.cursor);
+
+        cursor = apiData.pagination?.cursor;
+      } while (cursor);
+
       console.log(followed);
       const broadcasterLogins = followed.map(
         (item: { broadcaster_login: any }) => item.broadcaster_login
@@ -78,6 +79,10 @@ export async function GET(request: Request) {
           { user_id: session.data.session?.user.id, followed: broadcasterLogins },
           { onConflict: "user_id" }
         );
+
+      if (error) {
+        console.error("Error upserting data:", error);
+      }
       return NextResponse.redirect(`${origin}${next}`);
     }
   }

@@ -26,7 +26,7 @@ type FollowedProps = {
 
 export default function Followed({ data = [] }: FollowedProps) {
   if (!Array.isArray(data) || data.length === 0) {
-    return <h1>Vacío</h1>;
+    return <div></div>;
   }
 
   return (

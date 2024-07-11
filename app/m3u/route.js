@@ -41,30 +41,38 @@ export async function GET(request) {
       return NextResponse.json({ error: 'El parámetro "a" es requerido.' }, { status: 400 });
     }
 
-    const session = await supabase.auth.getSession();
-    const token = session.data.session?.provider_token;
-    const userId = session.data.session?.user.user_metadata.provider_id;
+    const token = process.env.TWITCH_TOKEN;
     const clientId = process.env.TWITCH_CLIENT_ID;
+    const streams = [];
+    const SIZE = 100;
+    let page = 0;
 
-    let userLogins = `&user_id=` + array.join(`&user_id=`);
-    console.log(`https://api.twitch.tv/helix/streams?first=100${userLogins}`)
+    while (array.length + 100 > (page + 1) * SIZE) {
+      let userLogins = `&user_login=` + array.slice(page * SIZE, page * SIZE + 100).join(`&user_login=`);
 
-    const respuesta = await fetch(
-      `https://api.twitch.tv/helix/streams?first=100${userLogins}`,
-      {
-        method: "GET",
-        headers: {
-          "Client-ID": `${clientId}`,
-          "Authorization": `Bearer ${token}`,
-        },
-      }
-    );
+      const respuesta = await fetch(
+        `https://api.twitch.tv/helix/streams?first=100${userLogins}`,
+        {
+          method: "GET",
+          headers: {
+            "Client-ID": `${clientId}`,
+            "Authorization": `Bearer ${token}`,
+          },
+        }
+      );
 
-    const datos = await respuesta.json();
-    const streams = datos.data;
-
+      const datos = await respuesta.json();
+      datos.data.map(stream => {
+        streams.push(stream)
+      })
+      page++
+    }
 
     streams.sort((a, b) => b.viewer_count - a.viewer_count);
+    console.log(streams)
+
+
+
 
     let fileContent = '#EXTM3U\n';
 

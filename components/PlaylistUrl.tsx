@@ -4,7 +4,7 @@ type PlaylistUrl = {
 
 export default function PlaylistUrl({ id = "" }: PlaylistUrl) {
   const defaultUrl = process.env.APP_URL
-    ? `https://${process.env.APP_URL}`
+    ? `${process.env.APP_URL}`
     : "http://localhost:3000/";
 
   const url = `${defaultUrl}m3u?id=${id}`;

@@ -72,8 +72,6 @@ export async function GET(request) {
     console.log(streams)
 
 
-
-
     let fileContent = '#EXTM3U\n';
 
     try {

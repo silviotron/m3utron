@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import { ModeToggle } from "@/components/mode-toggle";
 import HlsControl from "@/components/hlsControl";
 import Followed from "@/components/followed";
+import PlaylistUrl from "@/components/PlaylistUrl";
 
 export default async function Index() {
   const canInitSupabaseClient = () => {
@@ -57,6 +58,8 @@ export default async function Index() {
       </nav>
 
       <main className="w-full max-w-4xl">
+        {isSupabaseConnected && <PlaylistUrl id={session.data.session?.user.id} />}
+
         <Followed data={data.data} />
       </main>
 

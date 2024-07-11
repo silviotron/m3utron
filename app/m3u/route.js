@@ -91,7 +91,7 @@ export async function GET(request) {
       // Espera a que todas las promesas se resuelvan
       await Promise.all(promises);
 
-      fileContent += m3us.join()
+      fileContent += m3us.join("")
 
       // Crear un stream a partir del contenido del archivo
       const fileStream = new Readable();

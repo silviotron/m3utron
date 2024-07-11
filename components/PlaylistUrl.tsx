@@ -3,11 +3,11 @@ type PlaylistUrl = {
 };
 
 export default function PlaylistUrl({ id = "" }: PlaylistUrl) {
-  const defaultUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000";
+  const defaultUrl = process.env.APP_URL
+    ? `https://${process.env.APP_URL}`
+    : "http://localhost:3000/";
 
-  const url = `${defaultUrl}/m3u?id=${id}`;
+  const url = `${defaultUrl}m3u?id=${id}`;
 
   return (
     <div className="flex justify-center mb-4">

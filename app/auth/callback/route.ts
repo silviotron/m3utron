@@ -69,7 +69,7 @@ export async function GET(request: Request) {
 
       console.log(followed);
       const broadcasterLogins = followed.map(
-        (item: { broadcaster_id: any }) => item.broadcaster_id
+        (item: { broadcaster_login: any }) => item.broadcaster_login
       );
       console.log(broadcasterLogins);
 

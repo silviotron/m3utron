@@ -46,7 +46,7 @@ export async function GET(request) {
     const userId = session.data.session?.user.user_metadata.provider_id;
     const clientId = process.env.TWITCH_CLIENT_ID;
 
-    let userLogins = `&user_login=` + array.join(`&user_login=`);
+    let userLogins = `&user_id=` + array.join(`&user_id=`);
     console.log(`https://api.twitch.tv/helix/streams?first=100${userLogins}`)
 
     const respuesta = await fetch(
@@ -63,7 +63,6 @@ export async function GET(request) {
     const datos = await respuesta.json();
     const streams = datos.data;
 
-    console.log(`https://api.twitch.tv/helix/streams?first=100${userLogins}`)
 
     streams.sort((a, b) => b.viewer_count - a.viewer_count);
 

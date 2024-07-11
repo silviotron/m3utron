@@ -38,7 +38,6 @@ export default async function Index() {
     }
   );
   const data = await res.json();
-  console.log(data);
 
   const { error } = await supabase
     .from("streams")

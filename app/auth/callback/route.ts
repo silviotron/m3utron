@@ -61,17 +61,13 @@ export async function GET(request: Request) {
         if (apiData.data) {
           followed.push(...apiData.data);
         }
-        console.log(apiData);
-        console.log(followed);
 
         cursor = apiData.pagination?.cursor;
       } while (cursor);
 
-      console.log(followed);
       const broadcasterLogins = followed.map(
         (item: { broadcaster_login: any }) => item.broadcaster_login
       );
-      console.log(broadcasterLogins);
 
       const { error } = await supabase
         .from("followed")

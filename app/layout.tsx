@@ -9,7 +9,6 @@ const inter = Inter({ subsets: ["latin"] });
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";
-console.log(defaultUrl);
 export const metadata = {
   metadataBase: new URL(defaultUrl),
   title: "m3utron",

@@ -7,7 +7,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 const inter = Inter({ subsets: ["latin"] });
 
 const defaultUrl = process.env.APP_URL
-  ? `https://${process.env.APP_URL}`
+  ? `${process.env.APP_URL}`
   : "http://localhost:3000";
 export const metadata = {
   metadataBase: new URL(defaultUrl),

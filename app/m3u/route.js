@@ -71,17 +71,17 @@ export async function GET(request) {
     streams.sort((a, b) => b.viewer_count - a.viewer_count);
     console.log(streams)
 
-
     let fileContent = '#EXTM3U\n';
+    const m3us = []
 
     try {
       // Realiza todas las llamadas a Twitch en paralelo
-      const promises = streams.map(async (stream) => {
+      const promises = streams.map(async (stream, index) => {
         try {
           const twitchData = await twitch.getStream(stream.user_login, false);
           if (twitchData && twitchData[0]) {
-            fileContent += `#EXTINF:-1 tvg-name="${stream.user_name}" tvg-logo="${stream.thumbnail_url.replace(/-{width}x{height}/, "")}",🤵${stream.user_name} 🔴${formatNumber(stream.viewer_count)} 🎮${stream.game_name}\n`;
-            fileContent += `${twitchData[0].url}\n`;
+            m3us[index] = `#EXTINF:-1 tvg-name="${stream.user_name}" tvg-logo="${stream.thumbnail_url.replace(/-{width}x{height}/, "")}",🔴${formatNumber(stream.viewer_count)} 🤵${stream.user_name} 🎮${stream.game_name}\n`;
+            m3us[index] += `${twitchData[0].url}\n`;
           }
         } catch (err) {
           // No hacer nada si hay un error (probablemente el streamer no está en directo)
@@ -90,6 +90,8 @@ export async function GET(request) {
 
       // Espera a que todas las promesas se resuelvan
       await Promise.all(promises);
+
+      fileContent += m3us.join()
 
       // Crear un stream a partir del contenido del archivo
       const fileStream = new Readable();

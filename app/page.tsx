@@ -26,25 +26,57 @@ export default async function Index() {
   const token = session.data.session?.provider_token;
   const userId = session.data.session?.user.user_metadata.provider_id;
   const clientId = process.env.TWITCH_CLIENT_ID;
+  const streams: any[] = [];
 
-  const res = await fetch(
-    `https://api.twitch.tv/helix/streams/followed?user_id=${userId}`,
-    {
-      method: "GET",
-      headers: {
-        "Client-ID": `${clientId}`,
-        Authorization: `Bearer ${token}`,
-      },
+  try {
+    const { data, error } = await supabase
+      .from("followed")
+      .select("followed")
+      .eq("user_id", userId);
+
+    if (error) {
+      throw error;
     }
-  );
-  const data = await res.json();
 
-  const { error } = await supabase
-    .from("streams")
-    .upsert(
-      { user_id: session.data.session?.user.id, streams: data },
-      { onConflict: "user_id" }
-    );
+    if (!(data && data.length > 0)) {
+      throw error;
+    }
+
+    const followedList = data[0].followed;
+
+    const array = followedList;
+    if (!array) {
+      throw error;
+    }
+
+    const twitchToken = process.env.TWITCH_TOKEN;
+    const SIZE = 100;
+    let page = 0;
+
+    while (array.length + 100 > (page + 1) * SIZE) {
+      let userLogins =
+        `&user_login=` + array.slice(page * SIZE, page * SIZE + 100).join(`&user_login=`);
+
+      const respuesta = await fetch(
+        `https://api.twitch.tv/helix/streams?first=100${userLogins}`,
+        {
+          method: "GET",
+          headers: {
+            "Client-ID": `${clientId}`,
+            Authorization: `Bearer ${twitchToken}`,
+          },
+        }
+      );
+
+      const datos = await respuesta.json();
+      datos.data.map((stream: any) => {
+        streams.push(stream);
+      });
+      page++;
+    }
+
+    streams.sort((a, b) => b.viewer_count - a.viewer_count);
+  } catch (error) {}
 
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
@@ -59,7 +91,7 @@ export default async function Index() {
       <main className="w-full max-w-4xl">
         {isSupabaseConnected && <PlaylistUrl id={session.data.session?.user.id} />}
 
-        <Followed data={data.data} />
+        <Followed data={streams} />
       </main>
 
       <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">

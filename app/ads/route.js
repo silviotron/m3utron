@@ -78,10 +78,7 @@ export async function GET(request) {
       const promises = streams.map(async (stream, index) => {
         try {
           const twitchData = await fetch(`https://eu.luminous.dev/live/${stream.user_login}?allow_source=true&allow_audio_only=true&fast_bread=true`);
-          console.log(twitchData)
           const text = await twitchData.text();
-          console.log(text)
-          console.log()
           const lines = text.split('\n')
           const m3u8Lines = lines.filter(line => line.trim().endsWith('.m3u8'));
           const url = m3u8Lines[0]

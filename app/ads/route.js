@@ -77,10 +77,28 @@ export async function GET(request) {
       // Realiza todas las llamadas a Twitch en paralelo
       const promises = streams.map(async (stream, index) => {
         try {
-          const twitchData = await twitch.getStream(stream.user_login, false);
-          if (twitchData && twitchData[0]) {
+          const twitchData = await fetch(`https://lb-eu.cdn-perfprod.com/live/${stream.user_login}?allow_source=true&allow_audio_only=true&fast_bread=true`);
+          const text = await twitchData.text();
+          const lines = text.split('\n')
+          const url = lines[4]
+          if (url) {
             m3us[index] = `#EXTINF:-1 tvg-name="${stream.user_name}" tvg-logo="${stream.thumbnail_url.replace(/-{width}x{height}/, "")}",🔴${formatNumber(stream.viewer_count)} 😎${stream.user_name} 🎮${stream.game_name}\n`;
-            m3us[index] += `${twitchData[0].url}\n`;
+            m3us[index] += `${url}\n`;
+          } else {
+            const twitchData2 = await fetch(`https://https://eu.luminous.dev/live/${stream.user_login}?allow_source=true&allow_audio_only=true&fast_bread=true`);
+            const text2 = await twitchData2.text();
+            const lines2 = text2.split('\n')
+            const url2 = lines2[4]
+            if (url2) {
+              m3us[index] = `#EXTINF:-1 tvg-name="${stream.user_name}" tvg-logo="${stream.thumbnail_url.replace(/-{width}x{height}/, "")}",🔴${formatNumber(stream.viewer_count)} 😎${stream.user_name} 🎮${stream.game_name}\n`;
+              m3us[index] += `${url}\n`;
+            } else {
+              const twitchData3 = await twitch.getStream(stream.user_login, false);
+              if (twitchData3 && twitchData3[0]) {
+                m3us[index] = `#EXTINF:-1 tvg-name="${stream.user_name}" tvg-logo="${stream.thumbnail_url.replace(/-{width}x{height}/, "")}",🔴${formatNumber(stream.viewer_count)} 😎${stream.user_name} 🎮${stream.game_name}\n`;
+                m3us[index] += `${twitchData3[0].url}\n`;
+              }
+            }
           }
         } catch (err) {
           // No hacer nada si hay un error (probablemente el streamer no está en directo)

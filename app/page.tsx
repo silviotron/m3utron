@@ -33,14 +33,14 @@ export default async function Index() {
       .from("followed")
       .select("followed")
       .eq("user_id", userId);
-
+    console.log(data);
     if (error) {
       throw error;
     }
-
     if (!(data && data.length > 0)) {
       throw error;
     }
+    console.log(data[0]);
 
     const followedList = data[0].followed;
 

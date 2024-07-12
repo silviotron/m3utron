@@ -80,6 +80,7 @@ export async function GET(request) {
           const twitchData = await fetch(`https://lb-eu.cdn-perfprod.com/live/${stream.user_login}?allow_source=true&allow_audio_only=true&fast_bread=true`);
           const text = await twitchData.text();
           const lines = text.split('\n')
+          console.log(lines)
           const m3u8Lines = lines.filter(line => line.trim().endsWith('.m3u8'));
           const url = m3u8Lines[0]
           if (url) {

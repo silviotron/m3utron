@@ -80,7 +80,8 @@ export async function GET(request) {
           const twitchData = await fetch(`https://lb-eu.cdn-perfprod.com/live/${stream.user_login}?allow_source=true&allow_audio_only=true&fast_bread=true`);
           const text = await twitchData.text();
           const lines = text.split('\n')
-          const url = lines[4]
+          const m3u8Lines = lines.filter(line => line.trim().endsWith('.m3u8'));
+          const url = m3u8Lines[0]
           if (url) {
             m3us[index] = `#EXTINF:-1 tvg-name="${stream.user_name}" tvg-logo="${stream.thumbnail_url.replace(/-{width}x{height}/, "")}",🔴${formatNumber(stream.viewer_count)} 😎${stream.user_name} 🎮${stream.game_name}\n`;
             m3us[index] += `${url}\n`;
@@ -88,7 +89,8 @@ export async function GET(request) {
             const twitchData2 = await fetch(`https://https://eu.luminous.dev/live/${stream.user_login}?allow_source=true&allow_audio_only=true&fast_bread=true`);
             const text2 = await twitchData2.text();
             const lines2 = text2.split('\n')
-            const url2 = lines2[4]
+            const m3u8Lines2 = lines.filter(line => line.trim().endsWith('.m3u8'));
+            const url2 = m3u8Lines2[0]
             if (url2) {
               m3us[index] = `#EXTINF:-1 tvg-name="${stream.user_name}" tvg-logo="${stream.thumbnail_url.replace(/-{width}x{height}/, "")}",🔴${formatNumber(stream.viewer_count)} 😎${stream.user_name} 🎮${stream.game_name}\n`;
               m3us[index] += `${url}\n`;

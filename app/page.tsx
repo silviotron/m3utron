@@ -32,7 +32,7 @@ export default async function Index() {
     const { data, error } = await supabase
       .from("followed")
       .select("followed")
-      .eq("user_id", userId);
+      .eq("user_id", session.data.session?.user.id);
     console.log(data);
     if (error) {
       throw error;

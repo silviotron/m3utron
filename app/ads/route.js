@@ -85,7 +85,7 @@ export async function GET(request) {
           const lines = text.split('\n')
           const m3u8Lines = lines.filter(line => line.trim().endsWith('.m3u8'));
           const url = m3u8Lines[0]
-          if (url) {
+          if (url && (url.startsWith("https://video-weaver.") && url.endsWith(".m3u8"))) {
             m3us[index] = `#EXTINF:-1 tvg-name="${stream.user_name}" tvg-logo="${stream.thumbnail_url.replace(/-{width}x{height}/, "")}",🔴${formatNumber(stream.viewer_count)} 😎${stream.user_name} 🎮${stream.game_name}\n`;
             m3us[index] += `${url}\n`;
           } else {
@@ -94,7 +94,7 @@ export async function GET(request) {
             const lines2 = text2.split('\n')
             const m3u8Lines2 = lines2.filter(line => line.trim().endsWith('.m3u8'));
             const url2 = m3u8Lines2[0]
-            if (url2) {
+            if (url2 && (url2.startsWith("https://video-weaver.") && url2.endsWith(".m3u8"))) {
               m3us[index] = `#EXTINF:-1 tvg-name="${stream.user_name}" tvg-logo="${stream.thumbnail_url.replace(/-{width}x{height}/, "")}",🔴${formatNumber(stream.viewer_count)} 😎${stream.user_name} 🎮${stream.game_name}\n`;
               m3us[index] += `${url2}\n`;
             } else {

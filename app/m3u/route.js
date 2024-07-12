@@ -70,7 +70,6 @@ export async function GET(request) {
 
     streams.sort((a, b) => b.viewer_count - a.viewer_count);
 
-
     let fileContent = '#EXTM3U\n';
     const m3us = []
 

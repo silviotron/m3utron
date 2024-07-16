@@ -1,6 +1,7 @@
 import dayjs from "dayjs"; // Utilizaremos dayjs para manejar fechas y tiempos
 import { FaCircle } from "react-icons/fa6";
 import { Carousel, CarouselContent, CarouselItem } from "./ui/carousel";
+import { FaTwitch } from "react-icons/fa";
 
 type Stream = {
   id: string;
@@ -62,10 +63,11 @@ export default function Followed({ data = [] }: FollowedProps) {
 
               <div className="flex items-center text-sm mb-2 justify-between">
                 <div className="flex items-center">
-                  <a href={`https://www.twitch.tv/popout/${stream.user_login}/chat`}>
-                    <span className="w-4 h-4 mr-1">
-                      <FaCircle color="#6441a5" />
-                    </span>
+                  <a
+                    href={`https://www.twitch.tv/popout/${stream.user_login}/chat`}
+                    className="w-4 h-4 mr-1"
+                  >
+                    <FaTwitch color="#9146FF" />
                   </a>
 
                   <span className="w-4 h-4 mr-1">

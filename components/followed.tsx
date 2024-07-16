@@ -37,7 +37,10 @@ export default function Followed({ data = [] }: FollowedProps) {
 
         return (
           <div key={stream.id} className="  overflow-hidden shadow-lg">
-            <a href={`https://twitch-m3u8-api.vercel.app/?s=${stream.user_login}`}>
+            <a
+              target="_blank"
+              href={`https://twitch-m3u8-api.vercel.app/?s=${stream.user_login}`}
+            >
               <img
                 src={thumbnailUrl}
                 alt={`${stream.user_name} stream thumbnail`}
@@ -59,6 +62,12 @@ export default function Followed({ data = [] }: FollowedProps) {
 
               <div className="flex items-center text-sm mb-2 justify-between">
                 <div className="flex items-center">
+                  <a href={`https://www.twitch.tv/popout/${stream.user_login}/chat`}>
+                    <span className="w-4 h-4 mr-1">
+                      <FaCircle color="#6441a5" />
+                    </span>
+                  </a>
+
                   <span className="w-4 h-4 mr-1">
                     <FaCircle color="red" />
                   </span>

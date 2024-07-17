@@ -2,6 +2,7 @@ import dayjs from "dayjs"; // Utilizaremos dayjs para manejar fechas y tiempos
 import { FaCircle } from "react-icons/fa6";
 import { Carousel, CarouselContent, CarouselItem } from "./ui/carousel";
 import { FaTwitch } from "react-icons/fa";
+import Image from "next/image";
 
 type Stream = {
   id: string;
@@ -19,11 +20,28 @@ type Stream = {
   tag_ids: string[];
   tags: string[];
   is_mature: boolean;
+  img: string;
 };
 
 type FollowedProps = {
   data?: Stream[];
 };
+
+const clientId = process.env.TWITCH_CLIENT_ID;
+const twitchToken = process.env.TWITCH_TOKEN;
+
+async function getImg(login: string) {
+  const respuesta = await fetch(`https://api.twitch.tv/helix/users?login=${login}`, {
+    method: "GET",
+    headers: {
+      "Client-ID": `${clientId}`,
+      Authorization: `Bearer ${twitchToken}`,
+    },
+  });
+
+  const datos = await respuesta.json();
+  return datos.profile_image_url;
+}
 
 export default function Followed({ data = [] }: FollowedProps) {
   if (!Array.isArray(data) || data.length === 0) {
@@ -34,7 +52,10 @@ export default function Followed({ data = [] }: FollowedProps) {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {data.map((stream) => {
         // Eliminar "-{width}x{height}" de thumbnail_url para obtener tamaño máximo
-        const thumbnailUrl = stream.thumbnail_url.replace(/-{width}x{height}/, "");
+        const thumbnailUrl = stream.thumbnail_url.replace(
+          /-{width}x{height}/,
+          "-1280x720"
+        );
 
         return (
           <div key={stream.id} className="  overflow-hidden shadow-lg">
@@ -44,8 +65,10 @@ export default function Followed({ data = [] }: FollowedProps) {
               className="relative block group overflow-hidden hover:shadow-xl transition duration-300"
             >
               <div className="relative h-0" style={{ paddingBottom: "56.25%" }}>
-                <img
+                <Image
                   src={thumbnailUrl}
+                  width={1280}
+                  height={720}
                   alt={`${stream.user_name} stream thumbnail`}
                   className="absolute inset-0 w-full h-full object-cover"
                 />
@@ -81,10 +104,12 @@ export default function Followed({ data = [] }: FollowedProps) {
                       <span
                         className={`flex items-center gap-x-2 rounded-full text-base bg-[#9146FF] pr-3`}
                       >
-                        <img
-                          src="https://static-cdn.jtvnw.net/jtv_user_pictures/574228be-01ef-4eab-bc0e-a4f6b68bedba-profile_image-300x300.png"
-                          alt="ibai"
-                          className="rounded-full h-7"
+                        <Image
+                          src={stream.img}
+                          width={1280}
+                          height={720}
+                          alt={`${stream.user_name}`}
+                          className="rounded-full h-7 w-7"
                         />
                         <FaTwitch color="white" className="size-4" />
                         Chat

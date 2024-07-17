@@ -90,6 +90,29 @@ export default async function Index() {
         streams.push(stream);
       });
     }
+    const promises = streams.map(async (stream) => {
+      try {
+        const respuesta = await fetch(
+          `https://api.twitch.tv/helix/users?login=${stream.user_login}`,
+          {
+            method: "GET",
+            headers: {
+              "Client-ID": `${clientId}`,
+              Authorization: `Bearer ${twitchToken}`,
+            },
+          }
+        );
+
+        const datos = await respuesta.json();
+        stream.img = datos.data[0].profile_image_url;
+      } catch (err) {
+        console.error(err);
+        // No hacer nada si hay un error (probablemente el streamer no está en directo)
+      }
+    });
+
+    // Espera a que todas las promesas se resuelvan
+    await Promise.all(promises);
   } catch (error) {}
 
   return (

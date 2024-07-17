@@ -41,15 +41,25 @@ export default function Followed({ data = [] }: FollowedProps) {
             <a
               target="_blank"
               href={`https://twitch-m3u8-api.vercel.app/?s=${stream.user_login}`}
+              className="relative block group overflow-hidden hover:shadow-xl transition duration-300"
             >
-              <img
-                src={thumbnailUrl}
-                alt={`${stream.user_name} stream thumbnail`}
-                className="w-full h-48 object-cover"
-              />
+              <div className="relative h-0" style={{ paddingBottom: "56.25%" }}>
+                <img
+                  src={thumbnailUrl}
+                  alt={`${stream.user_name} stream thumbnail`}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-[#9146FF] bg-opacity-75 text-white text-center">
+                <span className="text-lg font-bold">Watch stream</span>
+              </div>
             </a>
+
             <div className="p-2">
-              <h2 title={stream.title} className="text-base font-bold mb-2 line-clamp-2">
+              <h2
+                title={stream.title}
+                className="text-sm font-bold mb-2 line-clamp-2 h-[2.5rem]"
+              >
                 {stream.title}
               </h2>
               <div className="flex justify-between text-sm mb-2">
@@ -65,13 +75,24 @@ export default function Followed({ data = [] }: FollowedProps) {
                 <div className="flex items-center">
                   <a
                     href={`https://www.twitch.tv/popout/${stream.user_login}/chat`}
-                    className="w-4 h-4 mr-4 hover:scale-110"
                     target="_blank"
                   >
-                    <FaTwitch color="#9146FF" />
+                    <div className="flex hover:scale-110 transition duration-200 ease-in-out select-none">
+                      <span
+                        className={`flex items-center gap-x-2 rounded-full text-base bg-[#9146FF] pr-3`}
+                      >
+                        <img
+                          src="https://static-cdn.jtvnw.net/jtv_user_pictures/574228be-01ef-4eab-bc0e-a4f6b68bedba-profile_image-300x300.png"
+                          alt="ibai"
+                          className="rounded-full h-7"
+                        />
+                        <FaTwitch color="white" className="size-4" />
+                        Chat
+                      </span>
+                    </div>
                   </a>
 
-                  <span className="w-4 h-4 mr-1">
+                  <span className="w-4 h-4 mr-1 ml-6">
                     <FaCircle color="red" />
                   </span>
                   <span>{stream.viewer_count}</span>

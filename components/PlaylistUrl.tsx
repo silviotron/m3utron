@@ -7,7 +7,7 @@ export default function PlaylistUrl({ id = "" }: PlaylistUrl) {
     ? `${process.env.APP_URL}`
     : "http://localhost:3000/";
 
-  const url = `${defaultUrl}m3u?id=${id}`;
+  let url = `${defaultUrl}m3u${id != "" ? `?id=${id}` : ``}`;
 
   return (
     <div className="flex justify-center mb-4">

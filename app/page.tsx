@@ -19,63 +19,77 @@ export default async function Index() {
   };
 
   const isSupabaseConnected = canInitSupabaseClient();
-
   const supabase = createClient();
-
+  const user = await supabase.auth.getUser();
+  const loged = user.data.user != null;
   const session = await supabase.auth.getSession();
-  const token = session.data.session?.provider_token;
-  const userId = session.data.session?.user.user_metadata.provider_id;
+
   const clientId = process.env.TWITCH_CLIENT_ID;
+  const twitchToken = process.env.TWITCH_TOKEN;
   const streams: any[] = [];
 
   try {
-    const { data, error } = await supabase
-      .from("followed")
-      .select("followed")
-      .eq("user_id", session.data.session?.user.id);
-    console.log(data);
-    if (error) {
-      throw error;
-    }
-    if (!(data && data.length > 0)) {
-      throw error;
-    }
-    console.log(data[0]);
+    if (loged) {
+      const token = session.data.session?.provider_token;
+      const userId = session.data.session?.user.user_metadata.provider_id;
+      const { data, error } = await supabase
+        .from("followed")
+        .select("followed")
+        .eq("user_id", session.data.session?.user.id);
+      if (error) {
+        throw error;
+      }
+      if (!(data && data.length > 0)) {
+        throw error;
+      }
 
-    const followedList = data[0].followed;
+      const followedList = data[0].followed;
 
-    const array = followedList;
-    if (!array) {
-      throw error;
-    }
+      const array = followedList;
+      if (!array) {
+        throw error;
+      }
 
-    const twitchToken = process.env.TWITCH_TOKEN;
-    const SIZE = 100;
-    let page = 0;
+      const SIZE = 100;
+      let page = 0;
 
-    while (array.length + 100 > (page + 1) * SIZE) {
-      let userLogins =
-        `&user_login=` + array.slice(page * SIZE, page * SIZE + 100).join(`&user_login=`);
+      while (array.length + 100 > (page + 1) * SIZE) {
+        let userLogins =
+          `&user_login=` +
+          array.slice(page * SIZE, page * SIZE + 100).join(`&user_login=`);
 
-      const respuesta = await fetch(
-        `https://api.twitch.tv/helix/streams?first=100${userLogins}`,
-        {
-          method: "GET",
-          headers: {
-            "Client-ID": `${clientId}`,
-            Authorization: `Bearer ${twitchToken}`,
-          },
-        }
-      );
+        const respuesta = await fetch(
+          `https://api.twitch.tv/helix/streams?first=100${userLogins}`,
+          {
+            method: "GET",
+            headers: {
+              "Client-ID": `${clientId}`,
+              Authorization: `Bearer ${twitchToken}`,
+            },
+          }
+        );
 
+        const datos = await respuesta.json();
+        datos.data.map((stream: any) => {
+          streams.push(stream);
+        });
+        page++;
+      }
+
+      streams.sort((a, b) => b.viewer_count - a.viewer_count);
+    } else {
+      const respuesta = await fetch(`https://api.twitch.tv/helix/streams?first=100`, {
+        method: "GET",
+        headers: {
+          "Client-ID": `${clientId}`,
+          Authorization: `Bearer ${twitchToken}`,
+        },
+      });
       const datos = await respuesta.json();
       datos.data.map((stream: any) => {
         streams.push(stream);
       });
-      page++;
     }
-
-    streams.sort((a, b) => b.viewer_count - a.viewer_count);
   } catch (error) {}
 
   return (

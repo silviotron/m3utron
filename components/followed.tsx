@@ -65,11 +65,10 @@ export default function Followed({ data = [] }: FollowedProps) {
                 <div className="flex items-center">
                   <a
                     href={`https://www.twitch.tv/popout/${stream.user_login}/chat`}
-                    className="w-4 h-4 mr-4"
+                    className="w-4 h-4 mr-4 hover:scale-110"
                     target="_blank"
                   >
                     <FaTwitch color="#9146FF" />
-                    Chat
                   </a>
 
                   <span className="w-4 h-4 mr-1">

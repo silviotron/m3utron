@@ -75,37 +75,48 @@ export async function GET(request) {
 
     try {
       // Realiza todas las llamadas a Twitch en paralelo
+
+
       const promises = streams.map(async (stream, index) => {
         try {
-          const twitchData = await fetch(`https://eu.luminous.dev/live/${stream.user_login}?allow_source=true&allow_audio_only=true&fast_bread=true`);
-          const text = await twitchData.text();
-          const lines = text.split('\n')
-          const m3u8Lines = lines.filter(line => line.trim().endsWith('.m3u8'));
-          const url = m3u8Lines[0]
-          if (url && (url.startsWith("https://video-weaver.") && url.endsWith(".m3u8"))) {
-            m3us[index] = `#EXTINF:-1 tvg-name="${stream.user_name}" tvg-logo="${stream.thumbnail_url.replace(/-{width}x{height}/, "")}",🔴${formatNumber(stream.viewer_count)} 😎${stream.user_name} 🎮${stream.game_name}\n`;
-            m3us[index] += `${url}\n`;
-          } else {
-            const twitchData2 = await fetch(`https://lb-eu.cdn-perfprod.com/live/${stream.user_login}?allow_source=true&allow_audio_only=true&fast_bread=true`);
-            const text2 = await twitchData2.text();
-            const lines2 = text2.split('\n')
-            const m3u8Lines2 = lines2.filter(line => line.trim().endsWith('.m3u8'));
-            const url2 = m3u8Lines2[0]
-            if (url2 && (url2.startsWith("https://video-weaver.") && url2.endsWith(".m3u8"))) {
+          let urlFound = false;
+          const endpoints = [
+            `https://eu.luminous.dev/live/${stream.user_login}?allow_source=true&allow_audio_only=true&fast_bread=true`,
+            `https://eu2.luminous.dev/live/${stream.user_login}?allow_source=true&allow_audio_only=true&fast_bread=true`,
+            `https://lb-eu.cdn-perfprod.com/live/${stream.user_login}?allow_source=true&allow_audio_only=true&fast_bread=true`,
+            `https://lb-eu2.cdn-perfprod.com/live/${stream.user_login}?allow_source=true&allow_audio_only=true&fast_bread=true`,
+            `https://lb-eu3.cdn-perfprod.com/live/${stream.user_login}?allow_source=true&allow_audio_only=true&fast_bread=true`,
+            `https://lb-eu4.cdn-perfprod.com/live/${stream.user_login}?allow_source=true&allow_audio_only=true&fast_bread=true`,
+            `https://lb-eu5.cdn-perfprod.com/live/${stream.user_login}?allow_source=true&allow_audio_only=true&fast_bread=true`,
+          ];
+
+          for (let i = 0; i < endpoints.length && !urlFound; i++) {
+            const endpoint = endpoints[i];
+            const twitchData = await fetch(endpoint);
+            const text = await twitchData.text();
+            const lines = text.split('\n');
+            const m3u8Lines = lines.filter(line => line.trim().endsWith('.m3u8'));
+            const url = m3u8Lines[0];
+
+            if (url && (url.startsWith("https://video-weaver.") && url.endsWith(".m3u8"))) {
               m3us[index] = `#EXTINF:-1 tvg-name="${stream.user_name}" tvg-logo="${stream.thumbnail_url.replace(/-{width}x{height}/, "")}",🔴${formatNumber(stream.viewer_count)} 😎${stream.user_name} 🎮${stream.game_name}\n`;
-              m3us[index] += `${url2}\n`;
-            } else {
-              const twitchData3 = await twitch.getStream(stream.user_login, false);
-              if (twitchData3 && twitchData3[0]) {
-                m3us[index] = `#EXTINF:-1 tvg-name="${stream.user_name}" tvg-logo="${stream.thumbnail_url.replace(/-{width}x{height}/, "")}",🔴${formatNumber(stream.viewer_count)} 😎${stream.user_name} 🎮${stream.game_name}\n`;
-                m3us[index] += `${twitchData3[0].url}\n`;
-              }
+              m3us[index] += `${url}\n`;
+              urlFound = true;
+            }
+          }
+
+          if (!urlFound) {
+            const twitchData3 = await twitch.getStream(stream.user_login, false);
+            if (twitchData3 && twitchData3[0]) {
+              m3us[index] = `#EXTINF:-1 tvg-name="${stream.user_name}" tvg-logo="${stream.thumbnail_url.replace(/-{width}x{height}/, "")}",🔴${formatNumber(stream.viewer_count)} 😎${stream.user_name} 🎮${stream.game_name}\n`;
+              m3us[index] += `${twitchData3[0].url}\n`;
             }
           }
         } catch (err) {
           // No hacer nada si hay un error (probablemente el streamer no está en directo)
         }
       });
+
 
       // Espera a que todas las promesas se resuelvan
       await Promise.all(promises);

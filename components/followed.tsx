@@ -60,8 +60,7 @@ export default function Followed({ data = [] }: FollowedProps) {
         return (
           <div key={stream.id} className="  overflow-hidden shadow-lg">
             <a
-              target="_blank"
-              href={`https://twitch-m3u8-api.vercel.app/?s=${stream.user_login}`}
+              href={`/${stream.user_login}`}
               className="relative block group overflow-hidden hover:shadow-xl transition duration-300"
             >
               <div className="relative h-0" style={{ paddingBottom: "56.25%" }}>

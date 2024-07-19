@@ -6,8 +6,12 @@ import HlsPlayer from "@/components/hlsPlayer";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 
-const VideoControl = () => {
-  const [videoUrl, setVideoUrl] = useState("https://ztnr.rtve.es/ztnr/1688877.m3u8");
+interface VideoControlProps {
+  src: string;
+}
+
+const VideoControl = ({ src }: VideoControlProps) => {
+  const [videoUrl, setVideoUrl] = useState(src);
   const [currentUrl, setCurrentUrl] = useState(videoUrl);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {

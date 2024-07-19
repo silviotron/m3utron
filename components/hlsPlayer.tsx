@@ -16,7 +16,17 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src }) => {
       hls.loadSource(src);
       hls.attachMedia(videoRef.current);
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        videoRef.current?.play();
+        videoRef.current
+          ?.play()
+          .then(() => {
+            // Se asegura de que el volumen esté configurado después de la reproducción
+            videoRef.current!.currentTime = videoRef.current!.duration - 4;
+            videoRef.current!.muted = false;
+            videoRef.current!.volume = 0.2;
+          })
+          .catch((error) => {
+            console.error("Error al reproducir el video:", error);
+          });
       });
 
       return () => {
@@ -29,7 +39,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src }) => {
     <video
       ref={videoRef}
       controls
-      autoPlay
       muted
       className="w-full h-full object-contain aspect-video"
     />

@@ -317,3 +317,16 @@
   border: 2px dashed #5fb3ce;
   background-color: #86c5da;
 }
+
+html {
+  width: 100%;
+  height: 100vh;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  /* Para Firefox */
+}
+
+/* Ocultar la barra de desplazamiento en WebKit */
+html::-webkit-scrollbar {
+  display: none;
+}

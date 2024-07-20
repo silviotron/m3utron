@@ -51,8 +51,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
   stream = stream.data[0];
   let channel = null;
 
-  console.log(user);
-  console.log(stream);
   if (!stream) {
     const channels = await fetch(
       `https://api.twitch.tv/helix/channels?broadcaster_id=${user.id}`,
@@ -67,7 +65,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
     channel = await channels.json();
     channel = channel.data[0];
-    console.log(channel);
   }
 
   return (

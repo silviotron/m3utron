@@ -3,9 +3,11 @@ import { ModeToggle } from "@/components/mode-toggle";
 import HlsPlayer from "@/components/hlsPlayer";
 import AuthButton from "@/components/AuthButton";
 import { Button } from "@/components/ui/button";
+import Chat from "@/components/chat";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import dayjs from "dayjs";
 import { IoPersonOutline } from "react-icons/io5";
+import { useTheme } from "next-themes";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const canInitSupabaseClient = () => {
@@ -171,12 +173,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
             </div>
           </div>
         </div>
-        <iframe
-          src={`https://www.twitch.tv/popout/${params.slug}/chat`}
-          width="100%"
-          height="100%"
-          className="w-[340px] fixed h-[calc(100%-4rem)] right-0 top-16 bottom-0"
-        />
+        <Chat login={params.slug} />
       </main>
     </div>
   );

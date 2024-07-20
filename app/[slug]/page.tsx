@@ -5,7 +5,7 @@ import AuthButton from "@/components/AuthButton";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import dayjs from "dayjs";
-import { FaCircle } from "react-icons/fa";
+import { IoPersonOutline } from "react-icons/io5";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const canInitSupabaseClient = () => {
@@ -106,7 +106,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
             <img
               src={user.profile_image_url}
               alt=""
-              className="rounded-full size-20 my-auto   border-4 border-[#9146FF] p-0"
+              className="rounded-full size-20 my-auto   border-4 border-[#9146FF] p-1"
             />
             <div className="w-full">
               <div className="flex justify-between">
@@ -124,10 +124,10 @@ export default async function Page({ params }: { params: { slug: string } }) {
               <div className="flex">
                 <h2>{stream?.title || channel?.title}</h2>
                 {stream && (
-                  <div className="ml-auto text-nowrap">
-                    <span className="mr-2 ">
-                      <span className="animate-pulse">🔴</span>
-                      {stream.viewer_count}
+                  <div className="ml-4 flex text-nowrap">
+                    <span className="mr-2 text-[#ff8280] flex text-nowrap ">
+                      <IoPersonOutline className="h-6 mr-1 " />
+                      <span>{stream.viewer_count}</span>
                     </span>
                     <span>
                       {dayjs().diff(dayjs(stream.started_at), "hours")}h{" "}
@@ -152,7 +152,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
                       loop: true,
                       dragFree: false,
                       skipSnaps: true,
-                      active: false,
                     }}
                     className="ml-4"
                   >
@@ -163,10 +162,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
                           key={index}
                           className="select-none"
                         >
-                          <CarouselItem
-                            key={index}
-                            className="basis-auto  bg-[#53535f] text-[#adadb8] px-2 py-[2px] text-xs font-semibold rounded-full mx-1  hover:opacity-80 max-w-full overflow-hidden"
-                          >
+                          <CarouselItem className="basis-auto  bg-[#53535f] text-[#adadb8] px-2 py-[2px] text-xs font-semibold rounded-full mx-1  hover:opacity-80 max-w-full overflow-hidden">
                             {tag}
                           </CarouselItem>
                         </a>

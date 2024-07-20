@@ -135,12 +135,11 @@ export default function Followed({ data = [] }: FollowedProps) {
               >
                 <CarouselContent className="select-none ml-0">
                   {stream.tags.map((tag, index) => (
-                    <CarouselItem
-                      key={index}
-                      className="basis-auto  bg-gray-200 text-gray-700 px-2 py-1 text-xs font-semibold rounded-full m-2"
-                    >
-                      {tag}
-                    </CarouselItem>
+                    <a href={`/directory/category/${tag}`} key={index}>
+                      <CarouselItem className="basis-auto  bg-gray-200 text-gray-700 px-2 py-1 text-xs font-semibold rounded-full m-2">
+                        {tag}
+                      </CarouselItem>
+                    </a>
                   ))}
                 </CarouselContent>
               </Carousel>

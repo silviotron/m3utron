@@ -3,11 +3,12 @@ import { ModeToggle } from "@/components/mode-toggle";
 import HlsPlayer from "@/components/hlsPlayer";
 import AuthButton from "@/components/AuthButton";
 import { Button } from "@/components/ui/button";
+import Timer from "@/components/timer";
 import Chat from "@/components/chat";
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
-import dayjs from "dayjs";
+import Tags from "@/components/tags";
 import { IoPersonOutline } from "react-icons/io5";
-import { useTheme } from "next-themes";
+import { FaRegHeart } from "react-icons/fa";
+import { RiVerifiedBadgeFill } from "react-icons/ri";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const canInitSupabaseClient = () => {
@@ -68,7 +69,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
     channel = await channels.json();
     channel = channel.data[0];
   }
-
+  //console.log(user);
+  //console.log(stream);
+  //console.log(channel);
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
       <nav className="w-full h-16 fixed bg-background">
@@ -88,7 +91,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       <main className="flex flex-col  w-full  min-h-screen md:flex-none md:inline">
         <div className="w-full xl:w-[88%] md:float-right  mt-16 md:pr-[340px] md:overflow-hidden">
           {stream ? (
-            <HlsPlayer src={`https://twitch-m3u8-api.vercel.app/p?s=${params.slug}`} />
+            <HlsPlayer src={`https://twitch-m3u8-api.vercel.app/p?s=${user.login}`} />
           ) : (
             <div className="relative">
               {user.offline_image_url != "" ? (
@@ -108,66 +111,55 @@ export default async function Page({ params }: { params: { slug: string } }) {
               className="rounded-full size-20 my-auto   border-4 border-[#9146FF] p-1"
             />
             <div className="w-full overflow-hidden">
-              <div className="flex justify-between">
-                <h1 className=" text-xl">{params.slug}</h1>
-                <div className="">
+              <div className="flex flex-wrap justify-between md:flex-nowrap">
+                <h1 className="text-xl flex">
+                  {user.display_name}
+                  {user.broadcaster_type == "partner" && (
+                    <RiVerifiedBadgeFill
+                      color="#9146FF"
+                      className="h-full ml-1 "
+                      size={15}
+                    />
+                  )}
+                </h1>
+                <div className="flex items-center space-x-2">
+                  {stream && (
+                    <>
+                      <span className="text-[#ff8280] flex items-center space-x-1">
+                        <IoPersonOutline className="h-6" />
+                        <span>{stream.viewer_count}</span>
+                      </span>
+                      <Timer start={stream.started_at} />
+                    </>
+                  )}
                   <Button
                     className="bg-[#9146FF] hover:bg-[#772ce8] h-7"
                     size="sm"
                     variant="outline"
                   >
+                    <FaRegHeart className="mr-1" />
                     Follow
                   </Button>
                 </div>
               </div>
-              <div className="flex justify-between">
+
+              <div className="mt-1 ">
                 <h2>{stream?.title || channel?.title}</h2>
-                {stream && (
-                  <div className="ml-aoto flex text-nowrap ">
-                    <span className="mr-2 text-[#ff8280] flex text-nowrap ">
-                      <IoPersonOutline className="h-6 mr-1 " />
-                      <span>{stream.viewer_count}</span>
-                    </span>
-                    <span>
-                      {dayjs().diff(dayjs(stream.started_at), "hours")}h{" "}
-                      {dayjs().diff(dayjs(stream.started_at), "minutes") % 60}m
-                    </span>
-                  </div>
-                )}
               </div>
-              <div className="flex w-full ">
+
+              <div className="mt-1 flex w-full flex-wrap md:flex-nowrap ">
                 <a
                   href={`/directory/all/tags/${
                     stream ? stream.game_name.replaceAll(" ", "-") : channel.game_name
                   }`}
+                  className="text-[#9146FF] whitespace-nowrap hover:underline mb-2 mr-4 "
                 >
-                  <span className="text-[#9146FF] whitespace-nowrap hover:underline">
-                    {stream?.game_name || channel.game_name}
-                  </span>
+                  {stream?.game_name || channel.game_name}
                 </a>
-                {stream && (
-                  <Carousel
-                    opts={{
-                      loop: true,
-                      dragFree: false,
-                      skipSnaps: true,
-                    }}
-                    className="ml-4 w-full max-w-full overflow-hidden text-nowrap whitespace-nowrap"
-                  >
-                    <CarouselContent className="select-none ml-0 ">
-                      {stream.tags.map((tag: string, index: number) => (
-                        <a
-                          href={`/directory/category/${tag}`}
-                          key={index}
-                          className="select-none"
-                        >
-                          <CarouselItem className="basis-auto  bg-[#53535f] text-[#adadb8] px-2 py-[2px] text-xs font-semibold rounded-full mx-1  hover:opacity-80 max-w-full overflow-hidden text-nowrap whitespace-nowrap">
-                            {tag}
-                          </CarouselItem>
-                        </a>
-                      ))}
-                    </CarouselContent>
-                  </Carousel>
+                {stream && stream.tags.length > 0 && (
+                  <div className="w-full mb-2">
+                    <Tags tags={stream.tags} />
+                  </div>
                 )}
               </div>
             </div>

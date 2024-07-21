@@ -1,10 +1,11 @@
-"use client";
 type PlaylistUrl = {
   id?: String;
 };
 
 export default function PlaylistUrl({ id = "" }: PlaylistUrl) {
-  const defaultUrl = window.location.href;
+  const defaultUrl = process.env.APP_URL
+    ? `${process.env.APP_URL}`
+    : "http://localhost:3000";
 
   let url = `${defaultUrl}m3u${id != "" ? `?id=${id}` : ``}`;
 

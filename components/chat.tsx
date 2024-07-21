@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 
 interface ChatProps {
   login: string;
+  className?: string; // Añadido para recibir className
 }
 
-export default function Chat({ login }: ChatProps) {
+export default function Chat({ login, className }: ChatProps) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
@@ -51,7 +52,7 @@ export default function Chat({ login }: ChatProps) {
       }&parent=${window.location.hostname}`}
       width="100%"
       height="100%"
-      className="w-[340px] fixed h-[calc(100%-4rem)] right-0 top-16 bottom-0"
+      className={` ${className}`}
     />
   );
 }

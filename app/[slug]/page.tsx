@@ -86,7 +86,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       </nav>
 
       <main className="w-full max-h-full">
-        <div className="w-[88%] float-right  mt-16 pr-[340px] overflow-hidden">
+        <div className="w-full md:w-[88%] md:float-right  mt-16 md:pr-[340px] md:overflow-hidden">
           {stream ? (
             <HlsPlayer src={`https://twitch-m3u8-api.vercel.app/p?s=${params.slug}`} />
           ) : (
@@ -173,7 +173,10 @@ export default async function Page({ params }: { params: { slug: string } }) {
             </div>
           </div>
         </div>
-        <Chat login={params.slug} />
+        <Chat
+          login={params.slug}
+          className="w-full min-h-96 md:w-[340px] md:fixed md:h-[calc(100%-4rem)] md:right-0 md:top-16 md:bottom-0 "
+        />
       </main>
     </div>
   );

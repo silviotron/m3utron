@@ -86,7 +86,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       </nav>
 
       <main className="w-full max-h-full">
-        <div className="w-[88%] float-right  mt-16 pr-[340px]">
+        <div className="w-[88%] float-right  mt-16 pr-[340px] overflow-hidden">
           {stream ? (
             <HlsPlayer src={`https://twitch-m3u8-api.vercel.app/p?s=${params.slug}`} />
           ) : (
@@ -107,7 +107,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
               alt=""
               className="rounded-full size-20 my-auto   border-4 border-[#9146FF] p-1"
             />
-            <div className="w-full">
+            <div className="w-full overflow-hidden">
               <div className="flex justify-between">
                 <h1 className=" text-xl">{params.slug}</h1>
                 <div className="">
@@ -120,10 +120,10 @@ export default async function Page({ params }: { params: { slug: string } }) {
                   </Button>
                 </div>
               </div>
-              <div className="flex">
+              <div className="flex justify-between">
                 <h2>{stream?.title || channel?.title}</h2>
                 {stream && (
-                  <div className="ml-4 flex text-nowrap">
+                  <div className="ml-aoto flex text-nowrap ">
                     <span className="mr-2 text-[#ff8280] flex text-nowrap ">
                       <IoPersonOutline className="h-6 mr-1 " />
                       <span>{stream.viewer_count}</span>
@@ -135,7 +135,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
                   </div>
                 )}
               </div>
-              <div className="flex ">
+              <div className="flex w-full ">
                 <a
                   href={`/directory/all/tags/${
                     stream ? stream.game_name.replaceAll(" ", "-") : channel.game_name
@@ -152,16 +152,16 @@ export default async function Page({ params }: { params: { slug: string } }) {
                       dragFree: false,
                       skipSnaps: true,
                     }}
-                    className="ml-4"
+                    className="ml-4 w-full"
                   >
-                    <CarouselContent className="select-none ml-0">
+                    <CarouselContent className="select-none ml-0 ">
                       {stream.tags.map((tag: string, index: number) => (
                         <a
                           href={`/directory/category/${tag}`}
                           key={index}
                           className="select-none"
                         >
-                          <CarouselItem className="basis-auto  bg-[#53535f] text-[#adadb8] px-2 py-[2px] text-xs font-semibold rounded-full mx-1  hover:opacity-80 max-w-full overflow-hidden">
+                          <CarouselItem className="basis-auto  bg-[#53535f] text-[#adadb8] px-2 py-[2px] text-xs font-semibold rounded-full mx-1  hover:opacity-80 max-w-full overflow-hidden text-nowrap whitespace-nowrap">
                             {tag}
                           </CarouselItem>
                         </a>

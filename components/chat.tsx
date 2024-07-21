@@ -48,13 +48,7 @@ export default function Chat({ login }: ChatProps) {
     <iframe
       src={`https://www.twitch.tv/embed/${login}/chat?${
         resolvedTheme === "dark" ? "darkpopout" : ""
-      }&parent=${
-        !process.env.APP_URL?.includes("localhost")
-          ? process.env.APP_URL?.endsWith("/")
-            ? process.env.APP_URL.slice(0, -1)
-            : process.env.APP_URL
-          : "localhost"
-      }`}
+      }&parent=${window.location.hostname}`}
       width="100%"
       height="100%"
       className="w-[340px] fixed h-[calc(100%-4rem)] right-0 top-16 bottom-0"

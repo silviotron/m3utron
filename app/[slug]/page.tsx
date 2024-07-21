@@ -85,8 +85,8 @@ export default async function Page({ params }: { params: { slug: string } }) {
         </div>
       </nav>
 
-      <main className="w-full max-h-full">
-        <div className="w-full md:w-[88%] md:float-right  mt-16 md:pr-[340px] md:overflow-hidden">
+      <main className="flex flex-col  w-full  min-h-screen md:flex-none md:inline">
+        <div className="w-full xl:w-[88%] md:float-right  mt-16 md:pr-[340px] md:overflow-hidden">
           {stream ? (
             <HlsPlayer src={`https://twitch-m3u8-api.vercel.app/p?s=${params.slug}`} />
           ) : (
@@ -152,7 +152,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
                       dragFree: false,
                       skipSnaps: true,
                     }}
-                    className="ml-4 w-full"
+                    className="ml-4 w-full max-w-full overflow-hidden text-nowrap whitespace-nowrap"
                   >
                     <CarouselContent className="select-none ml-0 ">
                       {stream.tags.map((tag: string, index: number) => (
@@ -175,7 +175,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
         </div>
         <Chat
           login={params.slug}
-          className="w-full min-h-96 md:w-[340px] md:fixed md:h-[calc(100%-4rem)] md:right-0 md:top-16 md:bottom-0 "
+          className="flex-1 relative top-0 left-0 w-full h-full  min-h-96  md:w-[340px] md:fixed md:h-[calc(100%-4rem)] md:right-0 md:top-16 md:bottom-0 md:left-auto"
         />
       </main>
     </div>

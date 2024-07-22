@@ -91,11 +91,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
         </div>
       </nav>
 
-      <main className="flex flex-col  w-full  min-h-screen md:flex-none md:flex-row ">
-        <div className="h-[calc(100vh-4rem)]  sticky left-0 top-16 w-[50px] hover:w-[260px]">
+      <main className="flex flex-col  w-full  min-h-screen xl:flex-none xl:flex-row ">
+        <div className="hidden xl:inline h-[calc(100vh-4rem)]  sticky left-0 top-16 w-[260px]">
           For you
         </div>
-        <div className="mt-16 md:overflow-hidden items-center flex flex-col flex-1">
+        <div className="mt-16 overflow-hidden xl:items-center xl:flex xl:flex-col xl:flex-1">
           <Video stream={stream} user={user} />
 
           <Info
@@ -107,7 +107,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
         </div>
         <Chat
           login={params.slug}
-          className="h-[calc(100vh-4rem)] sticky right-0 top-16 w-[50px] hover:w-[340px] opacity-0 hover:opacity-100"
+          className="flex-1 xl:flex-initial relative top-0 left-0 w-full h-full  min-h-[34rem] xl:h-[calc(100vh-4rem)] xl:sticky xl:right-0 xl:top-16 xl:w-[340px]"
         />
       </main>
     </div>

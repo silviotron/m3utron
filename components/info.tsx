@@ -22,34 +22,37 @@ export default function Video({ user, stream, channel, className }: InfoProps) {
       />
       <div className="w-full overflow-hidden">
         <div className="flex flex-wrap justify-between md:flex-nowrap">
-          <h1 className="text-xl flex">
+          <h1 className="flex text-sm xl:text-xl  h-full xl:h-auto flex items-center text-center">
             {user.display_name}
             {user.broadcaster_type == "partner" && (
-              <RiVerifiedBadgeFill color="#9146FF" className="h-full ml-1 " size={15} />
+              <RiVerifiedBadgeFill
+                color="#9146FF"
+                className="h-full ml-1 size-3 xl:size-4"
+              />
             )}
           </h1>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 ">
             {stream && (
               <>
-                <span className="text-[#ff8280] flex items-center space-x-1">
-                  <IoPersonOutline className="h-6" />
+                <span className="text-[#ff8280] flex items-center space-x-1 text-sm xl:text-base">
+                  <IoPersonOutline className="h-full" />
                   <span>{stream.viewer_count}</span>
                 </span>
-                <Timer start={stream.started_at} />
+                <Timer start={stream.started_at} className="text-xs xl:text-base" />
               </>
             )}
             <Button
-              className="bg-[#9146FF] hover:bg-[#772ce8] h-7"
+              className="bg-[#9146FF] hover:bg-[#772ce8] h-6 xl:h-7 px-1 xl:px-2"
               size="sm"
               variant="outline"
             >
-              <FaRegHeart className="mr-1" />
-              Follow
+              <FaRegHeart className="xl:mr-1" />
+              <span className="hidden xl:inline">Follow</span>
             </Button>
           </div>
         </div>
 
-        <div className="mt-1 ">
+        <div className="mt-1 text-xs xl:text-base">
           <h2>{stream?.title || channel?.title}</h2>
         </div>
 
@@ -58,7 +61,7 @@ export default function Video({ user, stream, channel, className }: InfoProps) {
             href={`/directory/all/tags/${
               stream ? stream.game_name.replaceAll(" ", "-") : channel.game_name
             }`}
-            className="text-[#9146FF] whitespace-nowrap hover:underline mb-2 mr-4 "
+            className="text-[#9146FF] whitespace-nowrap hover:underline mb-2 mr-4 text-xs xl:text-base"
           >
             {stream?.game_name || channel.game_name}
           </a>

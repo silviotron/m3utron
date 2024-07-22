@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import Timer from "@/components/timer";
 import Chat from "@/components/chat";
 import Tags from "@/components/tags";
+import Video from "@/components/video";
+import Info from "@/components/info";
+
 import { IoPersonOutline } from "react-icons/io5";
 import { FaRegHeart } from "react-icons/fa";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
@@ -70,7 +73,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
     channel = channel.data[0];
   }
   //console.log(user);
-  //console.log(stream);
+  console.log(stream);
   //console.log(channel);
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
@@ -88,86 +91,23 @@ export default async function Page({ params }: { params: { slug: string } }) {
         </div>
       </nav>
 
-      <main className="flex flex-col  w-full  min-h-screen md:flex-none md:inline">
-        <div className="w-full xl:w-[88%] md:float-right  mt-16 md:pr-[340px] md:overflow-hidden">
-          {stream ? (
-            <HlsPlayer src={`https://twitch-m3u8-api.vercel.app/p?s=${user.login}`} />
-          ) : (
-            <div className="relative">
-              {user.offline_image_url != "" ? (
-                <img src={user.offline_image_url} alt="s" className="w-full h-auto" />
-              ) : (
-                <div className="w-full bg-black aspect-video" />
-              )}
-              <span className="absolute top-4 right-6 bg-black bg-opacity-75 text-white px-1 py-0 text-sm">
-                OFFLINE
-              </span>
-            </div>
-          )}
-          <div className=" flex gap-4 mt-2">
-            <img
-              src={user.profile_image_url}
-              alt=""
-              className="rounded-full size-20 my-auto   border-4 border-[#9146FF] p-1"
-            />
-            <div className="w-full overflow-hidden">
-              <div className="flex flex-wrap justify-between md:flex-nowrap">
-                <h1 className="text-xl flex">
-                  {user.display_name}
-                  {user.broadcaster_type == "partner" && (
-                    <RiVerifiedBadgeFill
-                      color="#9146FF"
-                      className="h-full ml-1 "
-                      size={15}
-                    />
-                  )}
-                </h1>
-                <div className="flex items-center space-x-2">
-                  {stream && (
-                    <>
-                      <span className="text-[#ff8280] flex items-center space-x-1">
-                        <IoPersonOutline className="h-6" />
-                        <span>{stream.viewer_count}</span>
-                      </span>
-                      <Timer start={stream.started_at} />
-                    </>
-                  )}
-                  <Button
-                    className="bg-[#9146FF] hover:bg-[#772ce8] h-7"
-                    size="sm"
-                    variant="outline"
-                  >
-                    <FaRegHeart className="mr-1" />
-                    Follow
-                  </Button>
-                </div>
-              </div>
+      <main className="flex flex-col  w-full  min-h-screen md:flex-none md:flex-row ">
+        <div className="h-[calc(100vh-4rem)]  sticky left-0 top-16 w-[50px] hover:w-[260px]">
+          For you
+        </div>
+        <div className="mt-16 md:overflow-hidden items-center flex flex-col flex-1">
+          <Video stream={stream} user={user} />
 
-              <div className="mt-1 ">
-                <h2>{stream?.title || channel?.title}</h2>
-              </div>
-
-              <div className="mt-1 flex w-full flex-wrap md:flex-nowrap ">
-                <a
-                  href={`/directory/all/tags/${
-                    stream ? stream.game_name.replaceAll(" ", "-") : channel.game_name
-                  }`}
-                  className="text-[#9146FF] whitespace-nowrap hover:underline mb-2 mr-4 "
-                >
-                  {stream?.game_name || channel.game_name}
-                </a>
-                {stream && stream.tags.length > 0 && (
-                  <div className="w-full mb-2">
-                    <Tags tags={stream.tags} />
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+          <Info
+            user={user}
+            stream={stream}
+            channel={channel}
+            className="flex gap-4 p-2 w-full"
+          />
         </div>
         <Chat
           login={params.slug}
-          className="flex-1 relative top-0 left-0 w-full h-full  min-h-96  md:w-[340px] md:fixed md:h-[calc(100%-4rem)] md:right-0 md:top-16 md:bottom-0 md:left-auto"
+          className="h-[calc(100vh-4rem)] sticky right-0 top-16 w-[50px] hover:w-[340px] opacity-0 hover:opacity-100"
         />
       </main>
     </div>

@@ -5,9 +5,10 @@ import Hls from "hls.js";
 
 interface VideoPlayerProps {
   src: string;
+  poster?: string;
 }
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ src }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -40,7 +41,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src }) => {
       ref={videoRef}
       controls
       muted
-      className="w-full h-full object-contain aspect-video"
+      poster={poster}
+      className="w-full  aspect-video max-h-[calc(100vh-4rem)] bg-black"
     />
   );
 };

@@ -34,7 +34,6 @@ export async function GET(request) {
       .from("followed")
       .select("followed")
       .eq("user_id", id);
-    console.log(data)
 
     if (error) {
       function attr(name, value) {
@@ -96,13 +95,11 @@ export async function GET(request) {
         );
 
         const datos = await respuesta.json();
-        console.log(datos)
         datos.data.map(stream => {
           streams.push(stream)
         })
         page++
       }
-      console.log(streams)
       streams.sort((a, b) => b.viewer_count - a.viewer_count);
     }
 
@@ -165,7 +162,6 @@ export async function GET(request) {
 
 
       fileContent += m3us.join("")
-      console.log(fileContent)
 
       // Crear un stream a partir del contenido del archivo
       const fileStream = new Readable();

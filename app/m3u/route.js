@@ -34,6 +34,7 @@ export async function GET(request) {
       .from("followed")
       .select("followed")
       .eq("user_id", id);
+    console.log(data)
 
     if (error) {
       function attr(name, value) {

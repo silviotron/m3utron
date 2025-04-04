@@ -44,6 +44,7 @@ async function getImg(login: string) {
 }
 
 export default function Followed({ data = [] }: FollowedProps) {
+  console.log(data);
   if (!Array.isArray(data) || data.length === 0) {
     return <div></div>;
   }
